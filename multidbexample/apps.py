@@ -5,3 +5,6 @@ from django.apps import AppConfig
 
 class MultidbexampleConfig(AppConfig):
     name = 'multidbexample'
+
+    def ready(self):
+        import multidbexample.signals
