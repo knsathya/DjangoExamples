@@ -30,6 +30,46 @@ class PublisherCreate(CreateView):
 
         return super(PublisherCreate, self).post(request, *args, **kwargs)
 
+class PublisherUpdate(UpdateView):
+    model = multidbexamplemodels.Publisher
+    template_name ="add_entry.html"
+    form_class = multidbexampleforms.PublisherForm
+    success_url = reverse_lazy('index_page_view')
+
+    def get_object(self):
+        print "Inside publisher update get object"
+
+        if 'pk' not in self.kwargs.keys():
+            return None
+
+        obj = get_object_or_404(self.model, pk=self.kwargs['pk'])
+
+        return obj
+
+class PublisherDelete(DeleteView):
+    model = multidbexamplemodels.Publisher
+    template_name ="delete_entry.html"
+    form_class = multidbexampleforms.PublisherForm
+    context = []
+    success_url = reverse_lazy('index_page_view')
+
+    def get_object(self):
+        print "Inside publisher delete get object"
+
+        if 'pk' not in self.kwargs.keys():
+            return None
+
+        obj = get_object_or_404(self.model, pk=self.kwargs['pk'])
+
+        return obj
+
+    def get_context_data(self, **kwargs):
+        self.context = super(PublisherDelete, self).get_context_data(**kwargs)
+        self.context['class_name'] = "Publisher"
+        self.context['obj_name'] = self.get_object()
+
+        return self.context
+
 class AuthorCreate(CreateView):
     model = multidbexamplemodels.Author
     form_class = multidbexampleforms.AuthorForm
@@ -41,6 +81,46 @@ class AuthorCreate(CreateView):
         print self.success_url
 
         return super(AuthorCreate, self).post(request, *args, **kwargs)
+
+class AuthorUpdate(UpdateView):
+    model = multidbexamplemodels.Author
+    template_name ="add_entry.html"
+    form_class = multidbexampleforms.AuthorForm
+    success_url = reverse_lazy('index_page_view')
+
+    def get_object(self):
+        print "Inside author update get object"
+
+        if 'pk' not in self.kwargs.keys():
+            return None
+
+        obj = get_object_or_404(self.model, pk=self.kwargs['pk'])
+
+        return obj
+
+class AuthorDelete(DeleteView):
+    model = multidbexamplemodels.Author
+    template_name ="delete_entry.html"
+    form_class = multidbexampleforms.AuthorForm
+    context = []
+    success_url = reverse_lazy('index_page_view')
+
+    def get_object(self):
+        print "Inside author delete get object"
+
+        if 'pk' not in self.kwargs.keys():
+            return None
+
+        obj = get_object_or_404(self.model, pk=self.kwargs['pk'])
+
+        return obj
+
+    def get_context_data(self, **kwargs):
+        self.context = super(AuthorDelete, self).get_context_data(**kwargs)
+        self.context['class_name'] = "Author"
+        self.context['obj_name'] = self.get_object()
+
+        return self.context
 
 class IndexPageView(View):
     template_name ="index.html"

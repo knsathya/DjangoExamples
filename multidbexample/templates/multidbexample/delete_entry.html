@@ -1,0 +1,9 @@
+<p>Are you sure you want to delete the {{ class_name }} entry {{ obj_name }}?</p>
+<form action="" method="post">
+    {% csrf_token %}
+    <fieldset>
+      {{ form.as_p }}
+      <!-- Allow form submission with keyboard without duplicating the dialog button -->
+      <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+    </fieldset>
+</form>

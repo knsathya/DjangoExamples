@@ -8,7 +8,6 @@ function get_id_html(id, url_link, form_data) {
             url: url_link,
             data: form_data,
             success: function (data, textStatus) {
-                alert(data);
                 $(id).html(data)
             },
             error: function(xhr, status, e) {
@@ -25,7 +24,6 @@ function form_post_data(id, url_link, form_data) {
         url: url_link,
         data: form_data,
         success: function (data, textStatus) {
-            alert(data);
             return textStatus;
         },
         error: function (xhr, status, e) {

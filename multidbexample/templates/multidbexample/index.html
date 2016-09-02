@@ -15,6 +15,7 @@
     <link href="{% static "vendors/font-awesome/css/font-awesome.min.css"  %}" rel="stylesheet">
     <link href="{% static "css/custom.min.css"  %}" rel="stylesheet">
     <link href="{% static "vendors/datatables.net-bs/css/dataTables.bootstrap.min.css"  %}" rel="stylesheet">
+    <link href="{% static "vendors/jquery-ui/jquery-ui.css"  %}" rel="stylesheet">
 
 
     <script src="{% static "vendors/jquery/dist/jquery.min.js"  %}"></script>
@@ -23,20 +24,95 @@
     <script src="{% static "vendors/fastclick/lib/fastclick.js"  %}"></script>
     <script src="{% static "vendors/datatables.net/js/jquery.dataTables.min.js"  %}"></script>
     <script src="{% static "vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"  %}"></script>
+    <script src="{% static "vendors/jquery-ui/jquery-ui.js"  %}"></script>
       <!-- Custom Theme Scripts -->
     <script src="{% static "js/custom.min.js"  %}"></script>
     <script src="{% static "js/tnovelepub.js"  %}"></script>
     <script src="{% static "js/countries.js"  %}"></script>
 
     <script>
+        var csrf_data = {'csrfmiddlewaretoken' : '{{ csrf_token }}'};
         $(document).ready(function() {
             $('#datatable1').dataTable();
             $('#datatable2').dataTable();
         });
+
+        $(function() {
+            var table_id="None";
+            var dialog_form_action;
+
+            dialog = $( "#dialog-form" ).dialog({
+                autoOpen: false,
+                height: 500,
+                width: 600,
+                show: {
+                    effect: "blind",
+                        duration: 1000
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 1000
+                },
+                buttons: {
+                    "Add": function() {
+                        var form_data = $(this).find("form").serializeArray();
+                        form_data.push({name: 'csrfmiddlewaretoken', value: '{{ csrf_token }}'});
+                        form_post_data(table_id, dialog_form_action, form_data);
+                        $( this ).dialog( "close" );
+                    },
+                    Cancel: function() {
+                        $( this ).dialog( "close" );
+                    }
+                }
+            });
+
+            $( ".popup_link_class" ).click(function(event) {
+                var new_button_name = "Add", form_action, form_title;
+
+                event.preventDefault();
+                form_action = $(this).attr("href");
+                form_title = $(this).attr("title");
+
+                switch ($(this).attr("id")) {
+                case "add_publisher_href":
+                    table_id = "datatable1";
+                    new_button_name = "Add";
+                    break;
+                case "edit_publisher_href":
+                    table_id = "datatable1";
+                    new_button_name = "Update";
+                    break;
+                case "delete_publisher_href":
+                    table_id = "datatable1";
+                    new_button_name = "Delete";
+                    break;
+                case "add_author_href":
+                    table_id = "datatable2";
+                    new_button_name = "Add";
+                    break;
+                case "edit_author_href":
+                    table_id = "datatable2";
+                    new_button_name = "Update";
+                    break;
+                case "delete_author_href":
+                    table_id = "datatable2";
+                    new_button_name = "Delete";
+                    break;
+                }
+                dialog_form_action = form_action;
+                get_id_html('#dialog-form', form_action, csrf_data);
+                $( "#dialog-form" ).dialog('option', 'title', form_title);
+                // Give an ID attribute to the 'Ok' Button.
+                $('.ui-dialog-buttonpane button:contains(Add)').attr("id", "dialog-form_add-button");
+                // Change text of 'Add' button by its ID given above.
+                $("#dialog-form_add-button").html(new_button_name);
+                $( "#dialog-form" ).dialog( "open" );
+            });
+        });
     </script>
 </head>
 <body>
-
+    <div id="dialog-form" title="Create new entry"></div>
     <div class="right_col" role="main">
         <div class="">
             <div class="page-title">
@@ -148,6 +224,19 @@
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     <input type="text" id="id_last_name" name="last_name" required="required" class="form-control col-md-7 col-xs-12">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="id_publisher">Publisher <span class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <select class="form-control" id="id_publisher" name="publisher">
+                                        <option>Choose option</option>
+                                        {% for publisher in publisher_list %}
+                                            <option value={{ publisher.id }}>{{ publisher }}</option>
+                                        {% endfor %}
+                                    </select>
                                 </div>
                             </div>
 
