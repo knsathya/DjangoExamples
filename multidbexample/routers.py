@@ -1,5 +1,6 @@
 
 import multidbexample.models as multidbexamplemodels
+from DjangoExamples import settings
 
 class MultiDBExampleRouter(object):
 
@@ -7,15 +8,18 @@ class MultiDBExampleRouter(object):
         database = getattr(model, "_DATABASE", None)
         instance = hints.get('instance')
 
+        print "db_for_read: " + model._meta.label
+
         print hints
 
-        if instance:
-            print "db_for_read: " + type(instance).__name__
+        return database
 
         if isinstance(instance, multidbexamplemodels.Author):
+            print settings.DATABASES.keys()
+            print "db_for_read: " + model._meta.label + " using database " + instance.publisher.name
             return instance.publisher.name
         else:
-            print "default instance"
+            print "db_for_read: " + model._meta.label + " using default database"
 
         return "default"
 
@@ -23,13 +27,18 @@ class MultiDBExampleRouter(object):
         database = getattr(model, "_DATABASE", None)
         instance = hints.get('instance')
 
-        if instance:
-            print "db_for_write: " + type(instance).__name__
+        print "db_for_write: " + model._meta.label
+
+        print hints
+
+        return database
 
         if isinstance(instance, multidbexamplemodels.Author):
+            print settings.DATABASES.keys()
+            print "db_for_write: " + model._meta.label + " using database " + instance.publisher.name
             return instance.publisher.name
         else:
-            print "default instance"
+            print "db_for_write: " + model._meta.label + " using default database"
 
         return "default"
 

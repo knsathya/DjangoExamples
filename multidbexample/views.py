@@ -27,6 +27,8 @@ class PublisherCreate(CreateView):
         print "Inside PublisherCreate post func()"
         print request.POST
         print self.success_url
+        print self.template_name
+        print self.template_name_suffix
 
         return super(PublisherCreate, self).post(request, *args, **kwargs)
 

@@ -17,7 +17,7 @@ class MultiDBExampleSignal(object):
         print "*************** AUTHOR/PUBLISHER POST SAVE ***********************"
         if isinstance(instance, multidbexamplemodels.Publisher):
             print "publisher instance"
-            manager = MultiDBExampleManager(multidbexamplemodels.Publisher.__name__ + '-' + instance.name)
+            manager = MultiDBExampleManager(instance.name)
             manager.migrate()
         else:
             print "default instance"

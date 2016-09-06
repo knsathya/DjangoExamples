@@ -4,7 +4,6 @@ from django.db import models
 
 # Create your models here.
 
-
 class Publisher(models.Model):
     name = models.CharField(max_length=30, unique=True)
     address = models.CharField(max_length=50)
@@ -12,7 +11,7 @@ class Publisher(models.Model):
     state = models.CharField(max_length=30)
     country = models.CharField(max_length=50)
     website = models.URLField()
-    _DATABASE = u'publisher'
+    _DATABASE = u'default'
 
     def __unicode__(self):
         return self.name
@@ -22,7 +21,7 @@ class Author(models.Model):
     last_name = models.CharField(max_length=40)
     email = models.EmailField()
     publisher = models.ForeignKey(Publisher)
-    _DATABASE = u'author'
+    _DATABASE = u'test'
 
     class Meta:
         unique_together = ('first_name', 'first_name')
